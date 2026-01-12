@@ -388,6 +388,47 @@ var overlays = {
 L.control.layers(baseMaps, overlays, { collapsed: false }).addTo(map);
 
         setBounds();
+			// --- Legend built from the style function ---
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function () {
+  var div = L.DomUtil.create('div', 'legend');
+
+  // list the classes you want shown (match your switch cases)
+  var classes = [
+    'spaceport',
+    'major and military',
+    'military major',
+    'major',
+    'mid and military',
+    'military mid',
+    'mid',
+    'military',
+    'small',
+    'all other values'
+  ];
+
+  function colorFor(typeValue) {
+    // build a fake feature so we can call your style function
+    var fakeFeature = { properties: { type: typeValue } };
+
+    // for "all other values", use something that will NOT match a case
+    if (typeValue === 'all other values') fakeFeature.properties.type = '__other__';
+
+    var s = style_ne_10m_airports_1_0(fakeFeature);
+    return (s && s.fillColor) ? s.fillColor : '#666';
+  }
+
+  div.innerHTML = '<div class="title">Airports</div>' +
+    classes.map(function(lbl){
+      return '<div class="row"><i style="background:' + colorFor(lbl) + '"></i>' + lbl + '</div>';
+    }).join('');
+
+  return div;
+};
+
+legend.addTo(map);
+
         </script>        
     </body>
 </html>
