@@ -377,6 +377,16 @@
         });
         bounds_group.addLayer(layer_ne_10m_airports_1);
         map.addLayer(layer_ne_10m_airports_1);
+			var baseMaps = {
+  "OpenStreetMap": layer_OpenStreetMapLeaflet_0
+};
+
+var overlays = {
+  "Airports": layer_ne_10m_airports_1
+};
+
+L.control.layers(baseMaps, overlays, { collapsed: false }).addTo(map);
+
         setBounds();
         </script>        
     </body>
