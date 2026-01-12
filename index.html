@@ -388,41 +388,47 @@ var overlays = {
 L.control.layers(baseMaps, overlays, { collapsed: false }).addTo(map);
 
         setBounds();
-			// --- Legend built from the style function ---
-var legend = L.control({position: 'bottomright'});
+			// --- Airports legend (symbols + labels) ---
+var legend = L.control({ position: 'bottomright' });
 
-legend.onAdd = function () {
-  var div = L.DomUtil.create('div', 'legend');
+legend.onAdd = function (map) {
+  var div = L.DomUtil.create('div', 'info legend');
 
-  // list the classes you want shown (match your switch cases)
-  var classes = [
-    'spaceport',
-    'major and military',
-    'military major',
-    'major',
-    'mid and military',
-    'military mid',
-    'mid',
-    'military',
-    'small',
-    'all other values'
-  ];
+  // basic styling (no external CSS needed)
+  div.style.background = 'white';
+  div.style.padding = '10px';
+  div.style.borderRadius = '6px';
+  div.style.boxShadow = '0 0 8px rgba(0,0,0,0.2)';
+  div.style.lineHeight = '18px';
+  div.style.fontFamily = 'Arial, sans-serif';
+  div.style.fontSize = '13px';
 
-  function colorFor(typeValue) {
-    // build a fake feature so we can call your style function
-    var fakeFeature = { properties: { type: typeValue } };
+  div.innerHTML += '<div style="font-weight:600; margin-bottom:6px;">Airports (type)</div>';
 
-    // for "all other values", use something that will NOT match a case
-    if (typeValue === 'all other values') fakeFeature.properties.type = '__other__';
-
-    var s = style_ne_10m_airports_1_0(fakeFeature);
-    return (s && s.fillColor) ? s.fillColor : '#666';
+  function row(color, label) {
+    return `
+      <div style="display:flex; align-items:center; margin:2px 0;">
+        <span style="
+          width:12px; height:12px;
+          border-radius:50%;
+          background:${color};
+          border:1px solid #333;
+          display:inline-block;
+          margin-right:8px;"></span>
+        <span>${label}</span>
+      </div>`;
   }
 
-  div.innerHTML = '<div class="title">Airports</div>' +
-    classes.map(function(lbl){
-      return '<div class="row"><i style="background:' + colorFor(lbl) + '"></i>' + lbl + '</div>';
-    }).join('');
+  div.innerHTML += row('rgba(255,0,255,1.0)', 'spaceport');
+  div.innerHTML += row('rgba(221,45,76,1.0)', 'major and military');
+  div.innerHTML += row('rgba(255,142,119,1.0)', 'military major');
+  div.innerHTML += row('rgba(112,116,255,1.0)', 'major');
+  div.innerHTML += row('rgba(248,29,166,1.0)', 'mid and military');
+  div.innerHTML += row('rgba(255,142,119,1.0)', 'military mid');
+  div.innerHTML += row('rgba(10,98,85,1.0)', 'mid');
+  div.innerHTML += row('rgba(255,142,119,1.0)', 'military');
+  div.innerHTML += row('rgba(10,98,85,1.0)', 'small');
+  div.innerHTML += row('rgba(64,64,64,1.0)', 'all other values');
 
   return div;
 };
