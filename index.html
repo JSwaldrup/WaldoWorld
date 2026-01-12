@@ -112,8 +112,8 @@
         }
         map.createPane('pane_OpenStreetMapLeaflet_0');
         map.getPane('pane_OpenStreetMapLeaflet_0').style.zIndex = 400;
-        var layer_OpenStreetMapLeaflet_0 = L.tileLayer('https://{a,b,c}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-
+        var layer_OpenStreetMapLeaflet_0 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    subdomains: 'abc',
             pane: 'pane_OpenStreetMapLeaflet_0',
             opacity: 1.0,
             attribution: '',
